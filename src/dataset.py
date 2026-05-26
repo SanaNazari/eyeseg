@@ -51,13 +51,13 @@ CLASS_MAP: dict[str, int] = {"pupil": 0, "iris": 1, "sclera": 2}
 # ─────────────────────────────────────────────────────────────────────────────
 
 def _side_from_subfolder(subfolder: str) -> str:
-    """Return 'L' or 'R' from a subfolder name like '2024-05-04-08-43-43-L'."""
-    return subfolder.rsplit("-", 1)[-1].upper()
+    """Return 'L' or 'R' from a subfolder name like '2024-05-04-08-43-43_L'."""
+    return subfolder.rsplit("_", 1)[-1].upper()
 
 
 def _date_tag_from_subfolder(subfolder: str) -> str:
     """Return the date tag (everything before the trailing -L/-R)."""
-    return subfolder.rsplit("-", 1)[0]
+    return subfolder.rsplit("_", 1)[0]
 
 
 def _frame_image_path(
@@ -85,7 +85,7 @@ def _mask_path(
 ) -> Path:
     """Resolve full path to a binary class mask for one frame."""
     mask_folder = masks_dir / f"masks_{date_tag}" / f"masks_{date_tag}_{side}"
-    return mask_folder / class_name / image_name
+    return mask_folder / class_name / f"mask_{image_name}"
 
 
 # ─────────────────────────────────────────────────────────────────────────────
@@ -100,12 +100,24 @@ def discover_annotation_csvs(data_root: Path) -> list[Path]:
 
 
 def parse_annotations_csv(csv_path: Path) -> list[dict[str, str]]:
-    """Return list of {subfolder, image_name} dicts from one CSV."""
     rows = []
+
     with open(csv_path, newline="", encoding="utf-8") as f:
         reader = csv.DictReader(f)
-        for row in reader:
-            rows.append({"subfolder": row["subfolder"].strip(), "image_name": row["image_name"].strip()})
+
+        for i, row in enumerate(reader):
+            subfolder = (row.get("subfolder") or "").strip()
+            image_name = (row.get("image_name") or "").strip()
+
+            if not subfolder or not image_name:
+                print(f"Skipping malformed row {i}: {row}")
+                continue
+
+            rows.append({
+                "subfolder": subfolder,
+                "image_name": image_name
+            })
+
     return rows
 
 
@@ -144,6 +156,7 @@ def build_sample_records(
 
             image_path = _frame_image_path(groundtruth_dir, date_tag, subfolder, image_name)
             if not image_path.exists():
+                print("MISSING IMAGE:", image_path)
                 skipped += 1
                 continue
 
@@ -151,6 +164,7 @@ def build_sample_records(
             for class_name, class_id in CLASS_MAP.items():
                 m_path = _mask_path(masks_dir, date_tag, side, class_name, image_name)
                 if not m_path.exists():
+                    print("MISSING MASK:", m_path)
                     continue
                 polygons = binary_mask_to_polygon(m_path, min_area=min_mask_area)
                 if polygons:

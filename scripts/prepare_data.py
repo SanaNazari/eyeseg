@@ -16,8 +16,8 @@ from pathlib import Path
 # Allow running from project root without installing the package
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
-from src import load_config, prepare_dataset, resolve_paths
-from src.utils import get_logger
+from src.utils import load_config, resolve_paths, get_logger
+from src.dataset import  prepare_dataset
 
 logger = get_logger("prepare_data")
 

@@ -1,4 +1,5 @@
 """
+conda activate eyeseg
 scripts/train.py
 ────────────────
 Fine-tune (or train from scratch) a YOLOv8-seg model for eye segmentation.
