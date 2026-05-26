@@ -1,0 +1,53 @@
+# ─────────────────────────────────────────────
+#  Eye Segmentation – Central Configuration
+# ─────────────────────────────────────────────
+
+# ── Paths ────────────────────────────────────
+data_root: "/home/falcon/sana/scratch/eyeseg/data"          # root that contains groundtruth/, masks/, CleanAnnotations.csv
+yolo_dataset_dir: "yolo_dataset"         # created under data_root; holds images/ labels/ dataset.yaml
+output_dir: "runs"                       # training artefacts (relative to project root)
+
+# ── Dataset ──────────────────────────────────
+classes: ["pupil", "iris", "sclera"]     # order matters → class IDs 0, 1, 2
+val_split: 0.10                         # fraction of data used for validation
+test_split: 0.10                         # fraction of data used for test
+seed: 42
+min_mask_area: 50                        # ignore binary masks with fewer than this many white pixels
+polygon_epsilon: 1.0                     # cv2.approxPolyDP epsilon for contour simplification
+
+# ── Model ────────────────────────────────────
+model_size: "n"                          # yolov8 variant: n | s | m | l | x
+pretrained: true                         # fine-tune from COCO weights
+model_weights: ""                        # leave empty to use pretrained; set path to resume
+
+# ── Training ────────────────────────────────
+epochs: 100
+batch_size: 16
+imgsz: 640
+optimizer: "AdamW"                       # SGD | Adam | AdamW
+lr0: 0.001
+lrf: 0.01                               # final lr = lr0 * lrf
+momentum: 0.937
+weight_decay: 0.0005
+warmup_epochs: 3
+patience: 20                             # early stopping patience (0 = disabled)
+device: "2"                              # "cpu" | "0" | "0,1" for multi-GPU
+workers: 4
+amp: true                                # automatic mixed precision
+
+# ── Augmentation ─────────────────────────────
+augment: true
+degrees: 10.0
+translate: 0.1
+scale: 0.5
+fliplr: 0.5
+mosaic: 0.5
+copy_paste: 0.3
+
+# ── Weights & Biases ─────────────────────────
+wandb:
+  project: "eye-segmentation"
+  entity: ""                             # your W&B username or team (leave empty for default)
+  tags: ["yolov8"]
+  log_freq: 10                           # log images every N batches
+  log_model: False                        # upload best.pt as W&B artifact
