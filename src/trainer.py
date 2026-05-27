@@ -164,7 +164,7 @@ def train(cfg: dict) -> Path:
         # W&B is integrated natively by Ultralytics
         plots       = True,
         save        = True,
-        save_period = 10,
+        save_period = 100,
         verbose     = True,
     )
 

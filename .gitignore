@@ -1,1 +1,6 @@
 data/
+runs/
+wandb/
+
+log.txt
+*.pt

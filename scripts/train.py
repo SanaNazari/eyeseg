@@ -19,11 +19,11 @@ Usage
 import argparse
 import sys
 from pathlib import Path
-
+from typing import Optional
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
-from src import evaluate, load_config, resolve_paths, train
-from src.utils import get_logger
+from src.trainer import evaluate, train
+from src.utils import get_logger,load_config, resolve_paths
 
 logger = get_logger("train_script")
 
@@ -49,7 +49,7 @@ def parse_args() -> argparse.Namespace:
     return parser.parse_args()
 
 
-def apply_overrides(cfg: dict, overrides: list[str] | None) -> dict:
+def apply_overrides(cfg: dict, overrides: Optional[list[str]]) -> dict:
     """Parse KEY=VALUE strings and update cfg in-place."""
     if not overrides:
         return cfg
