@@ -2,5 +2,6 @@ data/
 runs/
 wandb/
 **/__pycache__/
+predicted/
 log.txt
 *.pt

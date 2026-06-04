@@ -1,5 +1,5 @@
 """
-predictor.py – Run inference with a trained YOLOv8-seg eye-segmentation model.
+predictor.py – Run inference with a trained YOLO-seg eye-segmentation model.
 
 Supports:
   • Single image

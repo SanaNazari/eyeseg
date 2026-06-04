@@ -48,6 +48,6 @@ copy_paste: 0.3
 wandb:
   project: "eye-segmentation"
   entity: ""                             # your W&B username or team (leave empty for default)
-  tags: ["yolov8"]
+  tags: ["yolov26"]
   log_freq: 100                           # log images every N batches
   log_model: True                        # upload best.pt as W&B artifact

@@ -32,12 +32,14 @@ def main():
 
     # Define output paths for Left (L) and Right (R) eye crops
     
-    dir_r = f"./groundtruth/{base_name}/frames/output_{base_name}_R"
-    dir_l = f"./groundtruth/{base_name}/frames/output_{base_name}_L"
+    dir_r = f"./data/groundtruth/{base_name}/frames/output_{base_name}_R"
+    dir_l = f"./data/groundtruth/{base_name}/frames/output_{base_name}_L"
+    dir_full = f"./data/groundtruth/{base_name}/frames/output_{base_name}_FULL"
 
     # Create directories if they don't already exist
     os.makedirs(dir_r, exist_ok=True)
     os.makedirs(dir_l, exist_ok=True)
+    os.makedirs(dir_full, exist_ok=True)
 
     # Default processing range (from start to the end of the video)
     start_time_sec = 0
@@ -103,6 +105,10 @@ def main():
             # Save the cropped images
             cv2.imwrite(name_l, left_eye)
             cv2.imwrite(name_r, right_eye)
+
+            # Also save the full frame
+            name_full = os.path.join(dir_full, f"{base_name}_frame_{current_frame:07d}_FULL.png")
+            cv2.imwrite(name_full, frame)
 
             # Print progress every 500 frames
             if current_frame % 500 == 0:
