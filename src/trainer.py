@@ -79,27 +79,19 @@ def log_best_model_artifact(
 # ─────────────────────────────────────────────────────────────────────────────
 
 def build_model(cfg: dict) -> YOLO:
-    """
-    Return a YOLO model.
-    - If cfg['model_weights'] is set and exists → resume / fine-tune from that checkpoint.
-    - Else if cfg['pretrained'] is True        → load COCO-pretrained weights.
-    - Else                                     → random initialisation.
-    """
     weights = cfg.get("model_weights", "").strip()
     if weights and Path(weights).exists():
         logger.info(f"Loading model from checkpoint: {weights}")
         return YOLO(weights)
 
-    size = cfg.get("model_size", "n")
+    variant = cfg.get("model_variant", "yolov8n-seg")
     if cfg.get("pretrained", True):
-        model_name = f"yolov8{size}-seg.pt"
-        logger.info(f"Loading pretrained model: {model_name}")
+        model_name = f"{variant}.pt"      # downloads pretrained weights
     else:
-        model_name = f"yolov8{size}-seg.yaml"
-        logger.info(f"Building model from config (no pretrained weights): {model_name}")
+        model_name = f"{variant}.yaml"    # random init from architecture config
 
+    logger.info(f"Loading model: {model_name}")
     return YOLO(model_name)
-
 
 # ─────────────────────────────────────────────────────────────────────────────
 # Training

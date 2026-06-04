@@ -1,6 +1,6 @@
 data/
 runs/
 wandb/
-
+__pycache__/
 log.txt
 *.pt

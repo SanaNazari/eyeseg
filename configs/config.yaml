@@ -16,7 +16,7 @@ min_mask_area: 50                        # ignore binary masks with fewer than t
 polygon_epsilon: 1.0                     # cv2.approxPolyDP epsilon for contour simplification
 
 # ── Model ────────────────────────────────────
-model_size: "n"                          # yolov8 variant: n | s | m | l | x
+model_variant: "yolov26n-seg"             # full model string, e.g. yolov8n-seg, yolo11n-seg, see https://docs.ultralytics.com/models/yolo26#performance-metrics
 pretrained: true                         # fine-tune from COCO weights
 model_weights: ""                        # leave empty to use pretrained; set path to resume
 
