@@ -76,6 +76,6 @@ python scripts/predict.py --source path/to/image_or_video.mp4
 | 2  | sclera |
 
 ## Notes
-- Uses **YOLOv8n-seg** by default (nano). Change `model_size` in config to `s`, `m`, `l`, `x` for larger models.
+- Uses **YOLOv8n-seg** by default (nano). Change `model_variant` in config to your desired YOLO variant.
 - Multi-GPU training is supported via `device: 0,1` in config.
 - All metrics and sample predictions are logged to Weights & Biases.
